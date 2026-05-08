@@ -5,7 +5,7 @@
 // ── Backend URL ──
 // ✅ ضع هنا رابط Google Apps Script الخاص بك
 // مثال: 'https://script.google.com/macros/s/AKfycbx.../exec'
-const BACKEND_URL = ''; // 👈 الصق رابطك هنا
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwc1JYuzgswRwZ_nCjZb11v3eHgxet2z1iVRfgs2qVh2702zxViCr1Cr6-N3sm4gLx8/exec';
 
 // ── كلمة مرور المعلم ──
 // ✅ غيّر هذه الكلمة قبل النشر
