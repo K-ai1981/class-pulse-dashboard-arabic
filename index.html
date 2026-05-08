@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة نبض الصف</title>
+    <meta name="description" content="أداة تفاعلية تساعد المعلم على فهم مستوى الطلاب بعد كل درس">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== رأس الصفحة ===== -->
+    <header class="hero">
+        <!-- زخارف الخلفية -->
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    أداة تقييم تفاعلية للفصل الدراسي
+                </div>
+                <div class="hero-icon-wrap">
+                    <span class="hero-icon">📊</span>
+                </div>
+                <h1 class="hero-title">لوحة نبض الصف</h1>
+                <p class="hero-subtitle">قياس سريع وذكي لفهم الطلاب بعد كل حصة</p>
+                <p class="hero-desc">
+                    أداة تفاعلية تساعد المعلم على فهم مستوى طلابه بعد كل درس
+                    من خلال جمع انطباعاتهم وأسئلتهم بشكل سريع ومنظم.
+                </p>
+                <div class="hero-actions">
+                    <a href="#student-form" class="btn btn-hero-primary">
+                        <span>✏️</span>
+                        ابدأ التقييم
+                    </a>
+                    <a href="#teacher-dashboard" class="btn btn-hero-ghost">
+                        <span>📊</span>
+                        لوحة المعلم
+                    </a>
+                </div>
+                <div class="hero-stats-row">
+                    <div class="hero-stat"><span class="hero-stat-icon">⚡</span> سريع وسهل</div>
+                    <div class="hero-stat-sep"></div>
+                    <div class="hero-stat"><span class="hero-stat-icon">🔒</span> خصوصية تامة</div>
+                    <div class="hero-stat-sep"></div>
+                    <div class="hero-stat"><span class="hero-stat-icon">🤖</span> توصية ذكية</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ===== شريط الوصف ===== -->
+        <div class="intro-banner">
+            <div class="container">
+                <div class="intro-inner">
+                    <div class="intro-icon-box">💡</div>
+                    <p class="intro-text">
+                        في نهاية الدرس، اختر شعورك تجاه الدرس، واكتب شيئاً تعلمته أو سؤالاً ما زال لديك.
+                        <strong>ستساعد إجابتك المعلم على تحسين الدروس القادمة.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-body container">
+
+            <!-- ===== نموذج الطالب ===== -->
+            <section id="student-form" class="section">
+                <div class="section-label">
+                    <span class="section-label-dot dot-blue"></span>
+                    للطالب
+                </div>
+                <div class="section-header">
+                    <div class="section-title-wrap">
+                        <span class="section-icon-box">📝</span>
+                        <h2 class="section-title">نموذج تقييم الطالب</h2>
+                    </div>
+                    <p class="section-desc">أجب على الأسئلة التالية في نهاية الدرس</p>
+                </div>
+
+                <div class="form-card">
+                    <!-- شريط تقدم النموذج -->
+                    <div class="form-progress">
+                        <div class="form-progress-step active">
+                            <span class="step-num">١</span>
+                            <span class="step-label">بياناتك</span>
+                        </div>
+                        <div class="form-progress-line"></div>
+                        <div class="form-progress-step">
+                            <span class="step-num">٢</span>
+                            <span class="step-label">مستوى الفهم</span>
+                        </div>
+                        <div class="form-progress-line"></div>
+                        <div class="form-progress-step">
+                            <span class="step-num">٣</span>
+                            <span class="step-label">تأملاتك</span>
+                        </div>
+                    </div>
+
+                    <form id="assessmentForm" novalidate>
+
+                        <!-- ── القسم 1: بيانات الطالب ── -->
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <span>١</span> بياناتك الأساسية
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="studentName" class="form-label">
+                                        اسم الطالب
+                                    </label>
+                                    <div class="input-wrap">
+                                        <span class="input-icon">👤</span>
+                                        <input type="text" id="studentName" name="studentName"
+                                            class="form-input" placeholder="أدخل اسمك هنا..." required>
+                                    </div>
+                                    <span class="field-error" id="error-studentName">⚠ هذا الحقل مطلوب</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="className" class="form-label">
+                                        الصف / الشعبة
+                                    </label>
+                                    <div class="input-wrap">
+                                        <span class="input-icon">🏫</span>
+                                        <input type="text" id="className" name="className"
+                                            class="form-input" placeholder="مثال: الصف العاشر - أ" required>
+                                    </div>
+                                    <span class="field-error" id="error-className">⚠ هذا الحقل مطلوب</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ── القسم 2: حالة الفهم ── -->
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <span>٢</span> مستوى الفهم
+                            </div>
+                            <p class="form-section-hint">اختر الخيار الذي يعبّر عنك بصدق</p>
+                            <div class="understanding-options">
+                                <label class="option-card option-green">
+                                    <input type="radio" name="understanding" value="فهمت الدرس جيداً" required>
+                                    <div class="option-body">
+                                        <div class="option-emoji">✅</div>
+                                        <div class="option-text">فهمت الدرس جيداً</div>
+                                        <div class="option-check">
+                                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="option-card option-blue">
+                                    <input type="radio" name="understanding" value="أحتاج إلى تدريب إضافي">
+                                    <div class="option-body">
+                                        <div class="option-emoji">📚</div>
+                                        <div class="option-text">أحتاج إلى تدريب إضافي</div>
+                                        <div class="option-check">
+                                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="option-card option-orange">
+                                    <input type="radio" name="understanding" value="ما زلت أشعر بالارتباك">
+                                    <div class="option-body">
+                                        <div class="option-emoji">😕</div>
+                                        <div class="option-text">ما زلت أشعر بالارتباك</div>
+                                        <div class="option-check">
+                                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="option-card option-purple">
+                                    <input type="radio" name="understanding" value="أستطيع مساعدة زملائي">
+                                    <div class="option-body">
+                                        <div class="option-emoji">🤝</div>
+                                        <div class="option-text">أستطيع مساعدة زملائي</div>
+                                        <div class="option-check">
+                                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <span class="field-error" id="error-understanding">⚠ يرجى اختيار حالة الفهم</span>
+                        </div>
+
+                        <!-- ── القسم 3: تأملات ── -->
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <span>٣</span> تأملاتك بعد الدرس
+                            </div>
+                            <div class="form-group">
+                                <label for="mainLearning" class="form-label">
+                                    ما أهم شيء تعلمته اليوم؟
+                                </label>
+                                <div class="textarea-wrap">
+                                    <span class="textarea-icon">⭐</span>
+                                    <textarea id="mainLearning" name="mainLearning"
+                                        class="form-textarea" rows="3"
+                                        placeholder="اكتب هنا أهم فكرة أو مفهوم تعلمته في هذا الدرس..."
+                                        required></textarea>
+                                </div>
+                                <span class="field-error" id="error-mainLearning">⚠ هذا الحقل مطلوب</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="remainingQuestion" class="form-label">
+                                    ما السؤال الذي ما زال لديك؟
+                                    <span class="optional-badge">اختياري</span>
+                                </label>
+                                <div class="textarea-wrap">
+                                    <span class="textarea-icon">❓</span>
+                                    <textarea id="remainingQuestion" name="remainingQuestion"
+                                        class="form-textarea" rows="3"
+                                        placeholder="إذا كان لديك سؤال أو نقطة غير واضحة، اكتبها هنا..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit-main" id="submitBtn">
+                            <span class="submit-icon">🚀</span>
+                            <span class="submit-text">إرسال التقييم</span>
+                            <span class="submit-arrow">←</span>
+                        </button>
+
+                    </form>
+
+                    <!-- رسالة النجاح -->
+                    <div id="successMessage" class="success-state hidden">
+                        <div class="success-bg-ring"></div>
+                        <div class="success-icon-wrap">🎉</div>
+                        <h3 class="success-title">شكراً لك!</h3>
+                        <p class="success-sub">تم إرسال تقييمك بنجاح.</p>
+                        <p class="success-note">إجابتك ستساعد معلمك على تحسين الدروس القادمة 💙</p>
+                        <button class="btn-new-response" id="newResponseBtn">
+                            ➕ إضافة تقييم آخر
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== لوحة المعلم ===== -->
+            <section id="teacher-dashboard" class="section">
+                <div class="section-label">
+                    <span class="section-label-dot dot-violet"></span>
+                    للمعلم
+                </div>
+                <div class="section-header">
+                    <div class="section-title-wrap">
+                        <span class="section-icon-box icon-violet">📊</span>
+                        <h2 class="section-title">لوحة ملخص المعلم</h2>
+                    </div>
+                    <p class="section-desc">نظرة سريعة على نتائج الطلاب</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card stat-primary">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap">👥</div>
+                            <div class="stat-trend">إجمالي</div>
+                        </div>
+                        <div class="stat-number" id="totalCount" data-target="0">0</div>
+                        <div class="stat-label">تقييم مُرسَل</div>
+                        <div class="stat-bar"><div class="stat-bar-fill" id="bar-total"></div></div>
+                    </div>
+                    <div class="stat-card stat-emerald">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap">✅</div>
+                            <div class="stat-trend" id="pct-understood">—</div>
+                        </div>
+                        <div class="stat-number" id="understoodCount" data-target="0">0</div>
+                        <div class="stat-label">فهموا جيداً</div>
+                        <div class="stat-bar"><div class="stat-bar-fill" id="bar-understood"></div></div>
+                    </div>
+                    <div class="stat-card stat-sky">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap">📚</div>
+                            <div class="stat-trend" id="pct-practice">—</div>
+                        </div>
+                        <div class="stat-number" id="needsPracticeCount" data-target="0">0</div>
+                        <div class="stat-label">يحتاجون تدريباً</div>
+                        <div class="stat-bar"><div class="stat-bar-fill" id="bar-practice"></div></div>
+                    </div>
+                    <div class="stat-card stat-amber">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap">😕</div>
+                            <div class="stat-trend" id="pct-confused">—</div>
+                        </div>
+                        <div class="stat-number" id="confusedCount" data-target="0">0</div>
+                        <div class="stat-label">يشعرون بارتباك</div>
+                        <div class="stat-bar"><div class="stat-bar-fill" id="bar-confused"></div></div>
+                    </div>
+                    <div class="stat-card stat-violet">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap">🤝</div>
+                            <div class="stat-trend" id="pct-canhelp">—</div>
+                        </div>
+                        <div class="stat-number" id="canHelpCount" data-target="0">0</div>
+                        <div class="stat-label">يساعدون الآخرين</div>
+                        <div class="stat-bar"><div class="stat-bar-fill" id="bar-canhelp"></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== التوصية الذكية ===== -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-title-wrap">
+                        <span class="section-icon-box icon-indigo">🤖</span>
+                        <h2 class="section-title">التوصية الذكية</h2>
+                    </div>
+                    <p class="section-desc">مقترح مبني تلقائياً على نتائج الطلاب</p>
+                </div>
+                <div id="recommendationCard" class="recommendation-card recommendation-empty">
+                    <div class="rec-icon-col">
+                        <div class="rec-icon-ring">
+                            <span id="recommendationIcon">💬</span>
+                        </div>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-label" id="recLabel">في انتظار المشاركة</div>
+                        <p class="rec-text" id="recommendationText">
+                            لم يتم إرسال أي تقييم بعد. ستظهر التوصية بعد مشاركة الطلاب.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== آخر الردود ===== -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-title-wrap">
+                        <span class="section-icon-box icon-slate">📋</span>
+                        <h2 class="section-title">آخر الردود</h2>
+                    </div>
+                    <button class="btn-clear" id="clearDataBtn">🗑 مسح الكل</button>
+                </div>
+                <div id="responsesList" class="responses-list">
+                    <div class="empty-state">
+                        <div class="empty-illustration">📭</div>
+                        <h3 class="empty-title">لا توجد ردود بعد</h3>
+                        <p class="empty-sub">سيظهر هنا ردود الطلاب فور إرسال النموذج</p>
+                    </div>
+                </div>
+            </section>
+
+        </div><!-- /page-body -->
+    </main>
+
+    <!-- ===== تذييل الصفحة ===== -->
+    <footer class="footer">
+        <div class="footer-inner container">
+            <div class="footer-brand">
+                <span class="footer-logo">📊</span>
+                <div>
+                    <div class="footer-name">لوحة نبض الصف</div>
+                    <div class="footer-tagline">أداة تعليمية مفتوحة المصدر</div>
+                </div>
+            </div>
+            <div class="footer-flow">
+                <span class="flow-step">🤖 AI</span>
+                <span class="flow-arrow">←</span>
+                <span class="flow-step">💻 Code</span>
+                <span class="flow-arrow">←</span>
+                <span class="flow-step">🐙 GitHub</span>
+                <span class="flow-arrow">←</span>
+                <span class="flow-step">🌐 Pages</span>
+                <span class="flow-arrow">←</span>
+                <span class="flow-step">🗄 Data</span>
+            </div>
+            <div class="footer-note">تم إنشاؤه بمساعدة Claude وGemini</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
