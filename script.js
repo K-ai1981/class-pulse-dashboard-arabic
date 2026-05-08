@@ -7,7 +7,88 @@
 // مثال: 'https://script.google.com/macros/s/AKfycbx.../exec'
 const BACKEND_URL = ''; // 👈 الصق رابطك هنا
 
-const STORAGE_KEY = 'classPulseResponses_v2';
+// ── كلمة مرور المعلم ──
+// ✅ غيّر هذه الكلمة قبل النشر
+const TEACHER_PASSWORD = 'teacher123';
+
+const STORAGE_KEY      = 'classPulseResponses_v2';
+const AUTH_KEY         = 'classPulseTeacherAuth';
+
+// ============================================================
+// 🔐  Teacher Authentication
+// ============================================================
+
+function openTeacherLogin() {
+    // إذا كان المعلم مسجلاً دخوله بالفعل — افتح اللوحة مباشرة
+    if (sessionStorage.getItem(AUTH_KEY) === 'true') {
+        showTeacherDashboard();
+        return;
+    }
+    document.getElementById('teacherModal').classList.remove('hidden');
+    setTimeout(() => document.getElementById('teacherPassword').focus(), 100);
+}
+
+function closeTeacherLogin() {
+    document.getElementById('teacherModal').classList.add('hidden');
+    document.getElementById('teacherPassword').value = '';
+    document.getElementById('passwordError').classList.add('hidden');
+}
+
+function handleOverlayClick(e) {
+    if (e.target.id === 'teacherModal') closeTeacherLogin();
+}
+
+function checkTeacherPassword() {
+    const input = document.getElementById('teacherPassword');
+    const error = document.getElementById('passwordError');
+
+    if (input.value === TEACHER_PASSWORD) {
+        // ✅ كلمة المرور صحيحة
+        sessionStorage.setItem(AUTH_KEY, 'true');
+        closeTeacherLogin();
+        showTeacherDashboard();
+    } else {
+        // ❌ كلمة المرور خاطئة
+        error.classList.remove('hidden');
+        input.classList.add('shake');
+        input.value = '';
+        setTimeout(() => input.classList.remove('shake'), 450);
+        input.focus();
+    }
+}
+
+function showTeacherDashboard() {
+    // أظهر شريط المعلم الثابت في الأعلى
+    document.getElementById('teacherBar').classList.remove('hidden');
+    document.body.classList.add('teacher-mode');
+
+    // أظهر أقسام المعلم مع أنيميشن
+    const sections = document.querySelectorAll('.teacher-section');
+    sections.forEach((sec, i) => {
+        sec.classList.remove('hidden');
+        sec.style.animationDelay = (i * 0.12) + 's';
+        sec.classList.add('reveal');
+    });
+
+    // تحديث اللوحة بالبيانات
+    updateDashboard();
+
+    // تمرير لأول قسم للمعلم
+    setTimeout(() => {
+        document.getElementById('teacher-dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+}
+
+function logoutTeacher() {
+    sessionStorage.removeItem(AUTH_KEY);
+    document.getElementById('teacherBar').classList.add('hidden');
+    document.body.classList.remove('teacher-mode');
+    document.querySelectorAll('.teacher-section').forEach(sec => {
+        sec.classList.add('hidden');
+        sec.classList.remove('reveal');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 // ── Storage helpers ──
 function getResponses() {
@@ -364,7 +445,12 @@ document.querySelectorAll('.section').forEach(s => {
 
 // ── Init ──
 document.addEventListener('DOMContentLoaded', () => {
-    updateDashboard();
+    // استعادة جلسة المعلم إذا كان مسجلاً دخوله مسبقاً
+    if (sessionStorage.getItem(AUTH_KEY) === 'true') {
+        showTeacherDashboard();
+    } else {
+        updateDashboard(); // تحديث الأرقام حتى لو مخفية
+    }
     watchFormFields();
     observeStats();
     console.log('✅ لوحة نبض الصف — جاهزة');

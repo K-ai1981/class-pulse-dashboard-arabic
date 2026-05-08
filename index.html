@@ -37,10 +37,10 @@
                         <span>✏️</span>
                         ابدأ التقييم
                     </a>
-                    <a href="#teacher-dashboard" class="btn btn-hero-ghost">
-                        <span>📊</span>
-                        لوحة المعلم
-                    </a>
+                    <button onclick="openTeacherLogin()" class="btn btn-hero-ghost">
+                        <span>🔐</span>
+                        دخول المعلم
+                    </button>
                 </div>
                 <div class="hero-stats-row">
                     <div class="hero-stat"><span class="hero-stat-icon">⚡</span> سريع وسهل</div>
@@ -242,7 +242,7 @@
             </section>
 
             <!-- ===== لوحة المعلم ===== -->
-            <section id="teacher-dashboard" class="section">
+            <section id="teacher-dashboard" class="section teacher-section hidden">
                 <div class="section-label">
                     <span class="section-label-dot dot-violet"></span>
                     للمعلم
@@ -310,7 +310,7 @@
             </section>
 
             <!-- ===== التوصية الذكية ===== -->
-            <section class="section">
+            <section class="section teacher-section hidden">
                 <div class="section-header">
                     <div class="section-title-wrap">
                         <span class="section-icon-box icon-indigo">🤖</span>
@@ -334,7 +334,7 @@
             </section>
 
             <!-- ===== آخر الردود ===== -->
-            <section class="section">
+            <section class="section teacher-section hidden">
                 <div class="section-header">
                     <div class="section-title-wrap">
                         <span class="section-icon-box icon-slate">📋</span>
@@ -378,6 +378,53 @@
             <div class="footer-note">تم إنشاؤه بمساعدة Claude وGemini</div>
         </div>
     </footer>
+
+    <!-- ===== شريط المعلم (يظهر بعد الدخول) ===== -->
+    <div id="teacherBar" class="teacher-bar hidden">
+        <div class="teacher-bar-inner container">
+            <div class="teacher-bar-info">
+                <span class="teacher-bar-icon">👨‍🏫</span>
+                <span class="teacher-bar-text">وضع المعلم — مرحباً بك</span>
+            </div>
+            <button class="teacher-bar-logout" onclick="logoutTeacher()">
+                🔒 إغلاق الجلسة
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== مودال دخول المعلم ===== -->
+    <div id="teacherModal" class="modal-overlay hidden" onclick="handleOverlayClick(event)">
+        <div class="modal-box">
+            <div class="modal-icon">🔐</div>
+            <h2 class="modal-title">دخول المعلم</h2>
+            <p class="modal-sub">هذه اللوحة للمعلمين فقط. أدخل كلمة المرور للمتابعة.</p>
+
+            <div class="modal-input-wrap">
+                <span class="modal-input-icon">🔑</span>
+                <input
+                    type="password"
+                    id="teacherPassword"
+                    class="modal-input"
+                    placeholder="كلمة المرور..."
+                    onkeydown="if(event.key==='Enter') checkTeacherPassword()"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div id="passwordError" class="modal-error hidden">
+                ❌ كلمة المرور غير صحيحة، حاول مجدداً
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal-confirm" onclick="checkTeacherPassword()">
+                    دخول <span>←</span>
+                </button>
+                <button class="btn-modal-cancel" onclick="closeTeacherLogin()">إلغاء</button>
+            </div>
+
+            <p class="modal-hint">💡 كلمة المرور الافتراضية: <code>teacher123</code></p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

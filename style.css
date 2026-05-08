@@ -1133,3 +1133,234 @@ form { padding: 32px 36px 36px; }
   .hero-stats-row { flex-direction: column; gap: 10px; }
   .hero-stat-sep { display: none; }
 }
+
+/* ============================================================
+   TEACHER AUTH — Modal & Bar
+   ============================================================ */
+
+/* dim overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeOverlay .22s ease both;
+}
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* modal box */
+.modal-box {
+  background: var(--white);
+  border-radius: var(--r-3xl);
+  padding: 44px 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(0,0,0,.25);
+  animation: slideUpModal .28s cubic-bezier(.175,.885,.32,1.275) both;
+  position: relative;
+}
+@keyframes slideUpModal {
+  from { opacity: 0; transform: translateY(30px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-icon {
+  font-size: 52px;
+  margin-bottom: 16px;
+  display: block;
+}
+.modal-title {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--slate-900);
+  margin-bottom: 8px;
+}
+.modal-sub {
+  font-size: .9rem;
+  color: var(--slate-400);
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.modal-input-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+.modal-input-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 17px;
+  pointer-events: none;
+}
+.modal-input {
+  width: 100%;
+  padding: 14px 44px 14px 16px;
+  border: 2px solid var(--slate-200);
+  border-radius: var(--r-md);
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  color: var(--slate-800);
+  background: var(--slate-50);
+  direction: rtl;
+  text-align: right;
+  transition: var(--transition);
+  letter-spacing: 3px;
+}
+.modal-input:focus {
+  outline: none;
+  border-color: var(--indigo-500);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(99,102,241,.1);
+}
+.modal-input.shake {
+  animation: shake .4s ease;
+  border-color: var(--rose-500);
+  background: var(--rose-50);
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(5px); }
+}
+
+.modal-error {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--rose-500);
+  background: var(--rose-50);
+  border: 1px solid var(--rose-100);
+  border-radius: var(--r-sm);
+  padding: 8px 14px;
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.btn-modal-confirm {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--indigo-600), var(--violet-600));
+  color: var(--white);
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  border: none;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(99,102,241,.35);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-modal-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(99,102,241,.45);
+}
+.btn-modal-cancel {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1.5px solid var(--slate-200);
+  color: var(--slate-500);
+  font-family: 'Cairo', sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-modal-cancel:hover { background: var(--slate-50); border-color: var(--slate-300); }
+
+.modal-hint {
+  font-size: .78rem;
+  color: var(--slate-400);
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--slate-100);
+}
+.modal-hint code {
+  background: var(--indigo-50);
+  color: var(--indigo-600);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ── Teacher top bar (shown when logged in) ── */
+.teacher-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background: linear-gradient(135deg, var(--indigo-700), var(--violet-700));
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(79,70,229,.4);
+}
+.teacher-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 12px;
+}
+.teacher-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.teacher-bar-icon { font-size: 22px; }
+.teacher-bar-text { font-size: .92rem; font-weight: 700; }
+
+.teacher-bar-logout {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,.15);
+  border: 1.5px solid rgba(255,255,255,.25);
+  color: var(--white);
+  font-family: 'Cairo', sans-serif;
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.teacher-bar-logout:hover { background: rgba(255,255,255,.25); }
+
+body.teacher-mode { padding-top: 54px; }
+
+/* ── Teacher sections reveal animation ── */
+.teacher-section {
+  transition: opacity .5s ease, transform .5s ease;
+}
+.teacher-section.reveal {
+  animation: revealSection .5s ease both;
+}
+@keyframes revealSection {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
