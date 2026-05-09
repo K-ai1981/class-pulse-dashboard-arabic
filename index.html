@@ -333,6 +333,30 @@
                 </div>
             </section>
 
+            <!-- ===== ردود Firebase المباشرة ===== -->
+            <section class="section teacher-section hidden">
+                <div class="section-header">
+                    <div class="section-title-wrap">
+                        <span class="section-icon-box icon-firebase">🔥</span>
+                        <h2 class="section-title">البيانات المباشرة — Firebase</h2>
+                    </div>
+                    <div class="firebase-toolbar">
+                        <div class="live-badge" id="firebaseLiveIndicator">
+                            <span class="live-dot"></span>
+                            <span class="live-text">مباشر</span>
+                            <span class="live-count">(<span id="firebaseCount">0</span>)</span>
+                        </div>
+                        <button class="btn-refresh" onclick="fetchFromFirebase()">🔄 تحديث</button>
+                    </div>
+                </div>
+                <div id="firebaseResponses" class="responses-list">
+                    <div class="empty-state">
+                        <span class="empty-illustration">☁️</span>
+                        <h3 class="empty-title">جارٍ التحميل...</h3>
+                    </div>
+                </div>
+            </section>
+
             <!-- ===== آخر الردود ===== -->
             <section class="section teacher-section hidden">
                 <div class="section-header">

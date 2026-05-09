@@ -2,11 +2,12 @@
 // لوحة نبض الصف — JavaScript
 // ============================================================
 
-// ── Backend URL ──
-// ✅ ضع هنا رابط Google Apps Script الخاص بك
-// مثال: 'https://script.google.com/macros/s/AKfycbx.../exec'
+// ── Google Sheets Backend ──
 const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbysk9drYIYgPO6uFi4dI1mb3h7PWsS4eOZjc3-stBOemTV2X6CanOlN1UmowMnwQai-/exec';
 const SECRET_TOKEN = 'pulse2025';
+
+// ── Firebase Realtime Database ──
+const FIREBASE_URL = 'https://class-pulse-dashboard-default-rtdb.firebaseio.com/responses';
 
 // ── كلمة مرور المعلم ──
 // ✅ غيّر هذه الكلمة قبل النشر
@@ -71,8 +72,8 @@ function showTeacherDashboard() {
         sec.classList.add('reveal');
     });
 
-    // تحديث اللوحة بالبيانات
-    updateDashboard();
+    // جلب البيانات من Firebase وتشغيل التحديث التلقائي
+    startFirebasePolling();
 
     // تمرير لأول قسم للمعلم
     setTimeout(() => {
@@ -84,6 +85,7 @@ function logoutTeacher() {
     sessionStorage.removeItem(AUTH_KEY);
     document.getElementById('teacherBar').classList.add('hidden');
     document.body.classList.remove('teacher-mode');
+    stopFirebasePolling();
     document.querySelectorAll('.teacher-section').forEach(sec => {
         sec.classList.add('hidden');
         sec.classList.remove('reveal');
@@ -328,19 +330,131 @@ function validate() {
     return ok;
 }
 
-// ── Send to backend ──
+// ── Send to Google Sheets ──
 function sendToBackend(data) {
-    if (!BACKEND_URL) {
-        console.log('📝 Backend غير مرتبط بعد. البيانات محفوظة محلياً.', data);
-        return;
-    }
+    if (!BACKEND_URL) return;
     fetch(BACKEND_URL, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, token: SECRET_TOKEN }),
     })
-    .then(() => console.log('✅ أُرسلت البيانات إلى Google Sheets'))
-    .catch(err => console.error('❌ خطأ:', err));
+    .then(() => console.log('✅ Google Sheets: تم الحفظ'))
+    .catch(err => console.error('❌ Google Sheets خطأ:', err));
+}
+
+// ── Save to Firebase Realtime Database ──
+function sendToFirebase(data) {
+    fetch(FIREBASE_URL + '.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    })
+    .then(r => r.json())
+    .then(res => console.log('✅ Firebase: تم الحفظ', res))
+    .catch(err => console.error('❌ Firebase خطأ:', err));
+}
+
+// ── Fetch all responses from Firebase (for teacher dashboard) ──
+function fetchFromFirebase() {
+    const indicator = document.getElementById('firebaseLiveIndicator');
+    const container = document.getElementById('firebaseResponses');
+    if (indicator) indicator.classList.add('loading');
+
+    fetch(FIREBASE_URL + '.json')
+    .then(r => r.json())
+    .then(data => {
+        if (indicator) indicator.classList.remove('loading');
+        if (!data) {
+            renderFirebaseResponses([]);
+            return;
+        }
+        // تحويل Object إلى Array وترتيب من الأحدث للأقدم
+        const list = Object.entries(data).map(([id, val]) => ({ id, ...val }))
+            .sort((a, b) => b.id.localeCompare(a.id));
+        renderFirebaseResponses(list);
+        updateDashboardFromFirebase(list);
+    })
+    .catch(err => {
+        console.error('❌ Firebase fetch خطأ:', err);
+        if (indicator) indicator.classList.remove('loading');
+    });
+}
+
+// ── Render Firebase responses in teacher section ──
+function renderFirebaseResponses(list) {
+    const container = document.getElementById('firebaseResponses');
+    const counter   = document.getElementById('firebaseCount');
+    if (!container) return;
+    if (counter) counter.textContent = list.length;
+
+    if (list.length === 0) {
+        container.innerHTML =
+            '<div class="empty-state">' +
+            '  <span class="empty-illustration">☁️</span>' +
+            '  <h3 class="empty-title">لا توجد ردود في Firebase بعد</h3>' +
+            '  <p class="empty-sub">ستظهر هنا فور إرسال الطلاب للنموذج</p>' +
+            '</div>';
+        return;
+    }
+
+    container.innerHTML = list.map(r => {
+        const cls   = statusClass(r.understanding);
+        const badge = statusBadge(r.understanding);
+        const initial = (r.studentName || '؟')[0];
+        const q = r.remainingQuestion
+            ? '<div class="response-field"><div class="response-field-label">❓ السؤال المتبقي</div>' +
+              '<div class="response-field-value">' + safe(r.remainingQuestion) + '</div></div>'
+            : '';
+        return (
+            '<div class="response-card ' + cls + '">' +
+            '  <div class="response-header">' +
+            '    <div class="response-avatar">' + safe(initial) + '</div>' +
+            '    <div class="response-info">' +
+            '      <div class="response-student-name">' + safe(r.studentName) + '</div>' +
+            '      <div class="response-class">🏫 ' + safe(r.className) + '</div>' +
+            '    </div>' +
+            '    <div class="response-badge">' + badge + '</div>' +
+            '  </div>' +
+            '  <hr class="response-divider">' +
+            '  <div class="response-field"><div class="response-field-label">⭐ أهم شيء تعلمه</div>' +
+            '  <div class="response-field-value">' + safe(r.mainLearning) + '</div></div>' +
+            q +
+            '  <div class="response-time">🕐 ' + safe(r.timestamp || '—') + '</div>' +
+            '</div>'
+        );
+    }).join('');
+}
+
+// ── Update stats from Firebase data ──
+function updateDashboardFromFirebase(list) {
+    const counts = {
+        'فهمت الدرس جيداً': 0, 'أحتاج إلى تدريب إضافي': 0,
+        'ما زلت أشعر بالارتباك': 0, 'أستطيع مساعدة زملائي': 0,
+    };
+    list.forEach(r => { if (counts.hasOwnProperty(r.understanding)) counts[r.understanding]++; });
+    const total = list.length;
+    animateCounter(document.getElementById('totalCount'), total);
+    animateCounter(document.getElementById('understoodCount'),    counts['فهمت الدرس جيداً']);
+    animateCounter(document.getElementById('needsPracticeCount'), counts['أحتاج إلى تدريب إضافي']);
+    animateCounter(document.getElementById('confusedCount'),      counts['ما زلت أشعر بالارتباك']);
+    animateCounter(document.getElementById('canHelpCount'),       counts['أستطيع مساعدة زملائي']);
+    updateBar('bar-understood', counts['فهمت الدرس جيداً'],      total, total, 'pct-understood');
+    updateBar('bar-practice',   counts['أحتاج إلى تدريب إضافي'], total, total, 'pct-practice');
+    updateBar('bar-confused',   counts['ما زلت أشعر بالارتباك'], total, total, 'pct-confused');
+    updateBar('bar-canhelp',    counts['أستطيع مساعدة زملائي'],  total, total, 'pct-canhelp');
+    updateRecommendation(total, counts);
+}
+
+// ── Auto-refresh Firebase every 10 seconds when teacher is logged in ──
+let firebaseInterval = null;
+function startFirebasePolling() {
+    fetchFromFirebase();
+    if (!firebaseInterval) {
+        firebaseInterval = setInterval(fetchFromFirebase, 10000);
+    }
+}
+function stopFirebasePolling() {
+    if (firebaseInterval) { clearInterval(firebaseInterval); firebaseInterval = null; }
 }
 
 // ── Form submit ──
@@ -364,6 +478,7 @@ document.getElementById('assessmentForm').addEventListener('submit', e => {
     setTimeout(() => {
         addResponse(data);
         sendToBackend(data);
+        sendToFirebase(data);
 
         document.getElementById('assessmentForm').classList.add('hidden');
         document.getElementById('successMessage').classList.remove('hidden');
