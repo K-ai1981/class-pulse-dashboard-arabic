@@ -5,7 +5,7 @@
 // ── Backend URL ──
 // ✅ ضع هنا رابط Google Apps Script الخاص بك
 // مثال: 'https://script.google.com/macros/s/AKfycbx.../exec'
-const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbxTbjcanMIp2_UdiIWwR7E8r__v1pMYsM4RAOHQmitDRPukA2bpQI8arAdzipkPXegO/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbysk9drYIYgPO6uFi4dI1mb3h7PWsS4eOZjc3-stBOemTV2X6CanOlN1UmowMnwQai-/exec';
 const SECRET_TOKEN = 'pulse2025';
 
 // ── كلمة مرور المعلم ──
