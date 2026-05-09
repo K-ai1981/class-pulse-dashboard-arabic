@@ -5,7 +5,8 @@
 // ── Backend URL ──
 // ✅ ضع هنا رابط Google Apps Script الخاص بك
 // مثال: 'https://script.google.com/macros/s/AKfycbx.../exec'
-const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwc1JYuzgswRwZ_nCjZb11v3eHgxet2z1iVRfgs2qVh2702zxViCr1Cr6-N3sm4gLx8/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbxTbjcanMIp2_UdiIWwR7E8r__v1pMYsM4RAOHQmitDRPukA2bpQI8arAdzipkPXegO/exec';
+const SECRET_TOKEN = 'pulse2025';
 
 // ── كلمة مرور المعلم ──
 // ✅ غيّر هذه الكلمة قبل النشر
@@ -336,7 +337,7 @@ function sendToBackend(data) {
     fetch(BACKEND_URL, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, token: SECRET_TOKEN }),
     })
     .then(() => console.log('✅ أُرسلت البيانات إلى Google Sheets'))
     .catch(err => console.error('❌ خطأ:', err));
